@@ -542,7 +542,7 @@ class UNISAL(BaseModel, utils.KwConfigClass):
                 rnn_feat = rnn_feat_seq[:, idx, ...]
                 rnn_feat = self.post_rnn(rnn_feat)
                 if self.res_rnn:
-                    im_feat = im_feat + rnn_feat
+                    im_feat = im_feat + rnn_feat # <-- Need to extract this temporal / latent vector
                 else:
                     im_feat = rnn_feat
 

@@ -45,7 +45,10 @@ class KwConfigClass:
 
 
 def get_timestamp():
-    return str(datetime.datetime.now())[:-7].replace(' ', '_')
+    # In windows ':' is not allowed in file names, so the following line must be reformatted
+    # If you're using another OS like Linux, make sure to uncomment this line 
+    # return str(datetime.datetime.now())[:-7].replace(' ', '_')
+    return datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
 
 
 def load_module(directory, module_name, full_name):
