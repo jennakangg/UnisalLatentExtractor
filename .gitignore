@@ -1,3 +1,7 @@
 __pycache__
 *.pyc
-training_runs
+datasets/
+examples/
+pre_upsampling_latents/
+saliency_unisal_latents/
+_saliency_unisal_workdir/

@@ -140,7 +140,6 @@ def predictions_from_folder(folder_path, is_video, source=None, train_id=None, m
 
 def predict_examples(train_id=None):
     """Generate predictions for example datasets (videos only)."""
-    print("HERE")
     print(Path(__file__).resolve().parent )
     for example_folder in (Path(__file__).resolve().parent / "examples").glob("*"):
         if not example_folder.is_dir():

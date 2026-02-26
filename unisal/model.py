@@ -148,8 +148,8 @@ class UNISAL(BaseModel, utils.KwConfigClass):
 
     def __init__(
         self,
-        rnn_input_channels=256,
-        rnn_hidden_channels=256,
+        rnn_input_channels=64, #256
+        rnn_hidden_channels=64, #256
         cnn_cfg=None,
         rnn_cfg=None,
         res_rnn=True,
@@ -523,6 +523,10 @@ class UNISAL(BaseModel, utils.KwConfigClass):
                 im_feat_1x = torch.cat((im_feat_1x, gaussian_maps), dim=1)
 
             im_feat_1x = self.post_cnn(im_feat_1x)
+
+            # modifications
+            im_feat_1x = F.avg_pool2d(im_feat_1x, kernel_size=2)
+
             feat_seq_1x.append(im_feat_1x)
             feat_seq_2x.append(im_feat_2x)
             feat_seq_4x.append(im_feat_4x)
@@ -546,7 +550,14 @@ class UNISAL(BaseModel, utils.KwConfigClass):
                 else:
                     im_feat = rnn_feat
 
-            im_feat = self.upsampling_1(im_feat)
+            # im_feat = self.upsampling_1(im_feat)
+            # downsampled earlier → restore spatial size
+            im_feat = F.interpolate(
+                im_feat,
+                size=feat_seq_2x[idx].shape[-2:],  # match spatial size
+                mode="bilinear",
+                align_corners=False
+            )
             im_feat = torch.cat((im_feat, feat_seq_2x[idx]), dim=1)
             im_feat = self.upsampling_2(im_feat)
             im_feat = torch.cat((im_feat, feat_seq_4x[idx]), dim=1)
